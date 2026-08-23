@@ -1,4 +1,4 @@
-import type { Product } from '../../domain/catalog'
+import type { Product } from '../../domain/catalog.ts'
 
 export const canonicalProducts: Product[] = [
   {
