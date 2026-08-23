@@ -37,6 +37,22 @@ export interface ProductFacts {
   category?: string
   volatility?: string
   supplier?: string
+  format?: string
+  author?: string
+  edition?: string
+  binding?: string
+  extent?: string
+  language?: string
+  material?: string
+  core?: string
+  dimensions?: string
+  finish?: string
+  attunement?: string
+  grade?: string
+  origin?: string
+  packageSize?: string
+  storage?: string
+  shelfLife?: string
   recommendedUsage?: string
   dosage?: string
   onset?: string
@@ -46,6 +62,12 @@ export interface ProductFacts {
   sideEffects?: string
   minimumUserAge?: string
   minimumUserWeight?: string
+}
+
+export interface ProductHandling {
+  title: string
+  notes: string[]
+  disclaimer?: string
 }
 
 export interface Product {
@@ -58,6 +80,7 @@ export interface Product {
   price: UnitPrice
   art: 'bottle' | 'book' | 'wand' | 'bundle'
   facts?: ProductFacts
+  handling?: ProductHandling
 }
 
 export function formatUnitPrice(price: UnitPrice) {

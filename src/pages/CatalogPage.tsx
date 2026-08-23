@@ -15,7 +15,7 @@ export function CatalogPage() {
 
   const query = searchParams.get('q') ?? ''
   const statusParam = searchParams.get('status')
-  const contentStatus: ContentStatus | 'all' = statusParam === 'canonical' || statusParam === 'demo' ? statusParam : 'all'
+  const contentStatus: ContentStatus | 'all' = statusParam === 'all' || statusParam === 'demo' ? statusParam : 'canonical'
   const results = filterProducts(products, { query, departmentId, contentStatus })
 
   function applyFilters(event: FormEvent<HTMLFormElement>) {
@@ -52,7 +52,7 @@ export function CatalogPage() {
               ))}
             </fieldset>
             <button className="button button--full" type="submit">Apply filters</button>
-            {(query || contentStatus !== 'all') && <Link className="clear-link" to={department ? `/departments/${department.id}` : '/catalog'}>Clear filters</Link>}
+            {(query || contentStatus !== 'canonical') && <Link className="clear-link" to={department ? `/departments/${department.id}` : '/catalog'}>Clear filters</Link>}
           </form>
           <div className="department-list">
             <h2>Departments</h2>

@@ -9,6 +9,25 @@ describe('catalog data boundaries', () => {
     expect(demoProducts.every((product) => product.contentStatus === 'demo')).toBe(true)
   })
 
+  it('provides four canonical products in every department', () => {
+    const departmentCounts = canonicalProducts.reduce<Record<string, number>>((counts, product) => {
+      counts[product.departmentId] = (counts[product.departmentId] ?? 0) + 1
+      return counts
+    }, {})
+
+    expect(departmentCounts).toEqual({
+      'potions-elixirs': 4,
+      'scrolls-tomes': 4,
+      'wands-staves': 4,
+      'ingredients-reagents': 4,
+    })
+  })
+
+  it('uses unique canonical stock numbers and slugs', () => {
+    expect(new Set(canonicalProducts.map((product) => product.sku)).size).toBe(canonicalProducts.length)
+    expect(new Set(canonicalProducts.map((product) => product.slug)).size).toBe(canonicalProducts.length)
+  })
+
   it('formats price without applying currency conversion', () => {
     expect(formatUnitPrice(canonicalProducts[0].price)).toBe('5 Copper per ounce')
   })

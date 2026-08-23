@@ -8,7 +8,7 @@ import { useCart } from '../state/CartContext'
 import { NotFoundPage } from './NotFoundPage'
 
 const factLabels: Record<string, string> = {
-  category: 'Category', volatility: 'Thaumaturgic volatility', supplier: 'Supplier', recommendedUsage: 'Recommended usage', dosage: 'Dosage', onset: 'Onset', primaryEffects: 'Primary effects', notRecommendedFor: 'Not recommended for', secondaryEffects: 'Secondary effects', sideEffects: 'Side effects', minimumUserAge: 'Minimum user age', minimumUserWeight: 'Minimum user weight',
+  category: 'Category', volatility: 'Thaumaturgic volatility', supplier: 'Supplier', format: 'Format', author: 'Author', edition: 'Edition', binding: 'Binding', extent: 'Extent', language: 'Language', material: 'Material', core: 'Core', dimensions: 'Dimensions', finish: 'Finish', attunement: 'Attunement', grade: 'Grade', origin: 'Origin', packageSize: 'Package size', storage: 'Storage', shelfLife: 'Shelf life', recommendedUsage: 'Recommended usage', dosage: 'Dosage', onset: 'Onset', primaryEffects: 'Primary effects', notRecommendedFor: 'Not recommended for', secondaryEffects: 'Secondary effects', sideEffects: 'Side effects', minimumUserAge: 'Minimum user age', minimumUserWeight: 'Minimum user weight',
 }
 
 export function ProductPage() {
@@ -18,6 +18,11 @@ export function ProductPage() {
   if (!product) return <NotFoundPage />
   const department = getDepartment(product.departmentId)!
   const facts = product.facts ? Object.entries(product.facts).filter(([, value]) => value !== undefined) : []
+  const handling = product.handling ?? {
+    title: 'General merchandise handling',
+    notes: ['Stock number checked before dispatch', 'Packed to prevent ordinary transit damage', 'Standard courier permitted'],
+    disclaimer: 'Special handling requirements, where applicable, are recorded with the merchandise.',
+  }
 
   return (
     <div className="page-shell shell">
@@ -44,7 +49,7 @@ export function ProductPage() {
       ) : (
         <div className="detail-sections">
           <section aria-labelledby="specification-heading"><p className="eyebrow">Official particulars</p><h2 id="specification-heading">Product specification</h2><dl className="facts-list">{facts.map(([key, value]) => <div key={key}><dt>{factLabels[key]}</dt><dd>{value}</dd></div>)}</dl></section>
-          <aside className="handling-card" aria-labelledby="handling-heading"><p className="eyebrow">Packing & dispatch</p><h2 id="handling-heading">Standard potion handling</h2><ul><li>Bottle securely stoppered</li><li>Stopper sealed with wax</li><li>Bottle cushioned appropriately</li><li>Rigid shipping container</li><li>Bottle kept upright</li><li>Standard courier permitted</li></ul><p>This basic guidance is not a complete SSC shipping policy.</p></aside>
+          <aside className="handling-card" aria-labelledby="handling-heading"><p className="eyebrow">Packing & dispatch</p><h2 id="handling-heading">{handling.title}</h2><ul>{handling.notes.map((note) => <li key={note}>{note}</li>)}</ul>{handling.disclaimer && <p>{handling.disclaimer}</p>}</aside>
         </div>
       )}
     </div>

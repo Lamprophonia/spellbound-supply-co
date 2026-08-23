@@ -16,8 +16,7 @@ export function filterProducts(products: Product[], filters: CatalogFilters) {
       product.sku,
       product.name,
       product.shortDescription,
-      product.facts?.category,
-      product.facts?.supplier,
+      ...Object.values(product.facts ?? {}),
     ].filter(Boolean).join(' ').toLocaleLowerCase()
     return searchable.includes(query)
   })
