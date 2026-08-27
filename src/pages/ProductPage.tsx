@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { ProductArt } from '../components/ProductArt'
+import { ProductImage } from '../components/ProductImage'
 import { StatusBadge } from '../components/StatusBadge'
 import { getDepartment } from '../data/departments'
 import { getProductBySlug } from '../data/products'
@@ -28,7 +28,7 @@ export function ProductPage() {
     <div className="page-shell shell">
       <nav className="breadcrumbs" aria-label="Breadcrumb"><Link to="/">Home</Link><span aria-hidden="true">/</span><Link to={`/departments/${department.id}`}>{department.name}</Link><span aria-hidden="true">/</span><span>{product.name}</span></nav>
       <article className="product-detail">
-        <div className="product-detail__art"><ProductArt product={product} large /></div>
+        <div className="product-detail__art"><ProductImage product={product} large /></div>
         <div className="product-detail__main">
           <StatusBadge status={product.contentStatus} />
           <p className="stock-number">Stock no. {product.sku}</p>

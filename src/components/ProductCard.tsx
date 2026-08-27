@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import type { Product } from '../domain/catalog'
 import { formatUnitPrice } from '../domain/catalog'
 import { useCart } from '../state/CartContext'
-import { ProductArt } from './ProductArt'
+import { ProductImage } from './ProductImage'
 import { StatusBadge } from './StatusBadge'
 
 export function ProductCard({ product }: { product: Product }) {
@@ -10,7 +10,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="product-card">
       <Link className="product-card__art-link" to={`/products/${product.slug}`} aria-label={`View ${product.name}`}>
-        <ProductArt product={product} />
+        <ProductImage product={product} />
       </Link>
       <div className="product-card__body">
         <StatusBadge status={product.contentStatus} />

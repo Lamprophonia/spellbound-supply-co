@@ -1,4 +1,5 @@
 import type { Product } from '../../domain/catalog'
+import { categoryPlaceholderImages } from '../productImages'
 
 // These records exist only to exercise the storefront layout. They are not SSC canon.
 export const demoProducts: Product[] = [
@@ -10,7 +11,7 @@ export const demoProducts: Product[] = [
     contentStatus: 'demo',
     shortDescription: 'A noncanonical sample listing used to preview book merchandising.',
     price: { amount: 8, denomination: 'Copper', unit: 'copy' },
-    art: 'book',
+    image: categoryPlaceholderImages['scrolls-tomes'],
   },
   {
     sku: 'DEMO-WND-0001',
@@ -20,7 +21,7 @@ export const demoProducts: Product[] = [
     contentStatus: 'demo',
     shortDescription: 'A noncanonical sample listing used to preview implement merchandising.',
     price: { amount: 2, denomination: 'Silver', unit: 'wand' },
-    art: 'wand',
+    image: categoryPlaceholderImages['wands-staves'],
   },
   {
     sku: 'DEMO-REA-0001',
@@ -30,6 +31,6 @@ export const demoProducts: Product[] = [
     contentStatus: 'demo',
     shortDescription: 'A noncanonical sample listing used to preview ingredient merchandising.',
     price: { amount: 6, denomination: 'Copper', unit: 'bundle' },
-    art: 'bundle',
+    image: categoryPlaceholderImages['ingredients-reagents'],
   },
 ]

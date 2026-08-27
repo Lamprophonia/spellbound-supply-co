@@ -28,6 +28,12 @@ describe('catalog data boundaries', () => {
     expect(new Set(canonicalProducts.map((product) => product.slug)).size).toBe(canonicalProducts.length)
   })
 
+  it('provides an explicitly classified image for every canonical product', () => {
+    expect(canonicalProducts.every((product) => product.image.src.startsWith('/products/'))).toBe(true)
+    expect(canonicalProducts.every((product) => product.image.alt.length)).toBeTruthy()
+    expect(canonicalProducts.every((product) => product.image.status === 'placeholder')).toBe(true)
+  })
+
   it('formats price without applying currency conversion', () => {
     expect(formatUnitPrice(canonicalProducts[0].price)).toBe('5 Copper per ounce')
   })

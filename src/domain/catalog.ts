@@ -70,6 +70,12 @@ export interface ProductHandling {
   disclaimer?: string
 }
 
+export interface ProductImage {
+  src: string
+  alt: string
+  status: 'placeholder' | 'final'
+}
+
 export interface Product {
   sku: string
   slug: string
@@ -78,7 +84,7 @@ export interface Product {
   contentStatus: ContentStatus
   shortDescription: string
   price: UnitPrice
-  art: 'bottle' | 'book' | 'wand' | 'bundle'
+  image: ProductImage
   facts?: ProductFacts
   handling?: ProductHandling
 }

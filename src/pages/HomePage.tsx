@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ProductArt } from '../components/ProductArt'
+import { ProductImage } from '../components/ProductImage'
 import { ProductCard } from '../components/ProductCard'
 import { departments } from '../data/departments'
 import { canonicalProducts } from '../data/canonical/products'
@@ -27,7 +27,7 @@ export function HomePage() {
           </div>
           <div className="hero__feature">
             <div className="feature-label"><span>Household essential</span><span>No. 0001</span></div>
-            <ProductArt product={featured} large />
+            <ProductImage product={featured} large />
             <div className="feature-copy">
               <div><p className="stock-number">{featured.sku}</p><h2>{featured.name}</h2></div>
               <p className="price"><strong>5 Copper</strong><span>per ounce</span></p>
