@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ProductImage } from '../components/ProductImage'
 import { products } from '../data/products'
+import { getCartUnitPrice } from '../domain/cartPricing'
 import { formatCurrency, toCopper } from '../domain/catalog'
 import { useCart } from '../state/CartContext'
 
@@ -8,10 +9,10 @@ export function CartPage() {
   const { lines, itemCount, setQuantity, removeItem, clearCart } = useCart()
   const cartLines = lines.flatMap((line) => {
     const product = products.find((item) => item.sku === line.sku)
-    return product ? [{ ...line, product }] : []
+    return product ? [{ ...line, product, unitPrice: getCartUnitPrice(product) }] : []
   })
   const totalCopper = cartLines.reduce(
-    (total, line) => total + toCopper(line.product.price.amount * line.quantity, line.product.price.denomination),
+    (total, line) => total + toCopper(line.unitPrice.amount * line.quantity, line.unitPrice.denomination),
     0,
   )
 
@@ -25,12 +26,12 @@ export function CartPage() {
         <div className="cart-layout">
           <section className="cart-lines" aria-labelledby="cart-items-heading">
             <div className="cart-section-heading"><h2 id="cart-items-heading">Goods entered</h2><button type="button" onClick={clearCart}>Clear cart</button></div>
-            {cartLines.map(({ product, quantity }) => (
+            {cartLines.map(({ product, quantity, unitPrice }) => (
               <article className="cart-line" key={product.sku}>
                 <Link to={`/products/${product.slug}`}><ProductImage product={product} /></Link>
-                <div className="cart-line__info"><p className="stock-number">{product.sku}</p><h3><Link to={`/products/${product.slug}`}>{product.name}</Link></h3><p>{product.price.amount} {product.price.denomination} per {product.price.unit}</p><button className="remove-button" type="button" onClick={() => removeItem(product.sku)}>Remove</button></div>
+                <div className="cart-line__info"><p className="stock-number">{product.sku}</p><h3><Link to={`/products/${product.slug}`}>{product.name}</Link></h3><p>{unitPrice.amount} {unitPrice.denomination} per {unitPrice.unit}</p><button className="remove-button" type="button" onClick={() => removeItem(product.sku)}>Remove</button></div>
                 <div className="quantity-field"><label htmlFor={`quantity-${product.sku}`}>Quantity ({product.price.unit}s)</label><input id={`quantity-${product.sku}`} type="number" min="1" step="1" value={quantity} onChange={(event) => setQuantity(product.sku, Number(event.target.value))} /></div>
-                <p className="line-total"><strong>{product.price.amount * quantity} {product.price.denomination}</strong></p>
+                <p className="line-total"><strong>{unitPrice.amount * quantity} {unitPrice.denomination}</strong></p>
               </article>
             ))}
           </section>
