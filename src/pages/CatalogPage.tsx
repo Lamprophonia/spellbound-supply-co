@@ -2,8 +2,7 @@ import { FormEvent } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ProductCard } from '../components/ProductCard'
 import { departments, getDepartment } from '../data/departments'
-import { products } from '../data/products'
-import { filterProducts } from '../domain/search'
+import { useCatalog } from '../state/useCatalog'
 import type { ContentStatus } from '../domain/catalog'
 import { NotFoundPage } from './NotFoundPage'
 
@@ -11,12 +10,15 @@ export function CatalogPage() {
   const { departmentId } = useParams()
   const department = departmentId ? getDepartment(departmentId) : undefined
   const [searchParams, setSearchParams] = useSearchParams()
-  if (departmentId && !department) return <NotFoundPage />
 
   const query = searchParams.get('q') ?? ''
   const statusParam = searchParams.get('status')
   const contentStatus: ContentStatus | 'all' = statusParam === 'all' || statusParam === 'demo' ? statusParam : 'canonical'
-  const results = filterProducts(products, { query, departmentId, contentStatus })
+  const apiParams = new URLSearchParams(searchParams)
+  if (departmentId) apiParams.set('departmentId', departmentId)
+  const catalog = useCatalog(`/api/products?${apiParams.toString()}`)
+  const results = catalog.data?.products ?? []
+  if (departmentId && !department) return <NotFoundPage />
 
   function applyFilters(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -25,7 +27,7 @@ export function CatalogPage() {
     const nextQuery = String(data.get('q') ?? '').trim()
     const nextStatus = String(data.get('status') ?? 'all')
     if (nextQuery) next.set('q', nextQuery)
-    if (nextStatus !== 'all') next.set('status', nextStatus)
+    if (nextStatus !== 'canonical') next.set('status', nextStatus)
     setSearchParams(next)
   }
 
@@ -40,7 +42,7 @@ export function CatalogPage() {
       <div className="catalog-layout">
         <aside className="filters" aria-label="Catalog filters">
           <form key={`${departmentId ?? ''}:${searchParams.toString()}`} onSubmit={applyFilters}>
-            <div className="filter-heading"><h2>Refine catalog</h2><span>{results.length} {results.length === 1 ? 'item' : 'items'}</span></div>
+            <div className="filter-heading"><h2>Refine catalog</h2><span>{catalog.data ? `${results.length} ${results.length === 1 ? 'item' : 'items'}` : '—'}</span></div>
             <div className="field">
               <label htmlFor="catalog-search">Search</label>
               <input id="catalog-search" name="q" type="search" defaultValue={query} placeholder="Name or stock no." />
@@ -62,7 +64,7 @@ export function CatalogPage() {
         </aside>
         <section aria-labelledby="results-heading">
           <div className="results-heading"><h2 id="results-heading">{query ? `Results for “${query}”` : department?.shortName ?? 'All goods'}</h2><span>Ordered by stock number</span></div>
-          {results.length > 0 ? <div className="product-grid product-grid--catalog">{results.map((product) => <ProductCard key={product.sku} product={product} />)}</div> : <div className="empty-state"><span aria-hidden="true">∅</span><h2>No catalog entries found</h2><p>Try another term or broaden the record-status filter.</p><Link className="button button--outline" to={department ? `/departments/${department.id}` : '/catalog'}>Clear filters</Link></div>}
+          {catalog.loading ? <p role="status">Loading catalog…</p> : catalog.failed ? <div role="alert"><p>Unable to load the catalog. Please try again.</p><button className="button" onClick={catalog.retry}>Retry</button></div> : results.length > 0 ? <div className="product-grid product-grid--catalog">{results.map((product) => <ProductCard key={product.sku} product={product} />)}</div> : <div className="empty-state"><span aria-hidden="true">∅</span><h2>No catalog entries found</h2><p>Try another term or broaden the record-status filter.</p><Link className="button button--outline" to={department ? `/departments/${department.id}` : '/catalog'}>Clear filters</Link></div>}
         </section>
       </div>
     </div>

@@ -18,6 +18,8 @@ function canonicalProductDataPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), canonicalProductDataPlugin()],
+  server: { proxy: { '/api': 'http://127.0.0.1:8787', '/data/products.json': 'http://127.0.0.1:8787' } },
+  preview: { proxy: { '/api': 'http://127.0.0.1:8787' } },
   test: {
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
