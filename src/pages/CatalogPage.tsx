@@ -39,7 +39,7 @@ export function CatalogPage() {
       </header>
       <div className="catalog-layout">
         <aside className="filters" aria-label="Catalog filters">
-          <form onSubmit={applyFilters}>
+          <form key={`${departmentId ?? ''}:${searchParams.toString()}`} onSubmit={applyFilters}>
             <div className="filter-heading"><h2>Refine catalog</h2><span>{results.length} {results.length === 1 ? 'item' : 'items'}</span></div>
             <div className="field">
               <label htmlFor="catalog-search">Search</label>
